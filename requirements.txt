@@ -10,3 +10,4 @@ matplotlib
 scikit-learn
 python-telegram-bot
 python-dotenv
+python-dotenv>=1.0.0
