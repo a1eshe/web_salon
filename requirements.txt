@@ -3,3 +3,5 @@ textblob
 # boshqa kutubxonalar (masalan):
 gunicorn
 psycopg2-binary
+celery>=5.3.1
+redis>=5.0.0
