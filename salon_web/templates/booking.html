@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-8">
+    <h2 class="text-3xl font-semibold text-pink-600 mb-6 text-center">𝐁𝐨𝐨𝐤 𝐚 𝐬𝐞𝐫𝐯𝐢𝐜𝐞</h2>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Xizmat tanlash -->
+        <div>
+            <label for="service" class="block text-sm font-medium text-gray-700">𝐒𝐞𝐫𝐯𝐢𝐜𝐞:</label>
+            <select name="service_id" id="service" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500">
+                {% for service in services %}
+                    <option value="{{ service.id }}" {% if service.id == selected_service_id %}selected{% endif %}>
+                        {{ service.name }} - {{ service.price }} so'm
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Xodim tanlash -->
+        <div>
+            <label for="employee" class="block text-sm font-medium text-gray-700">𝐒𝐭𝐚𝐟𝐟:</label>
+            <select name="employee_id" id="employee" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500">
+                {% for employee in employees %}
+                    <option value="{{ employee.id }}" {% if employee.id == selected_employee_id %}selected{% endif %}>
+                        {{ employee.name }} ({{ employee.specialization }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Sana -->
+        <div>
+            <label for="date" class="block text-sm font-medium text-gray-700">𝐃𝐚𝐭𝐚:</label>
+            <input type="date" name="date" id="date" required value="{{ selected_date }}" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500">
+        </div>
+
+        <!-- Vaqt -->
+        <div>
+            <label for="time" class="block text-sm font-medium text-gray-700">𝐓𝐢𝐦𝐞:</label>
+            <select name="time" id="time" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500">
+                <option disabled selected>Avval xodim va sana tanlang</option>
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="w-full bg-pink-500 text-white py-3 rounded-md hover:bg-pink-600 transition duration-300 font-semibold">
+                𝐁𝐨𝐨𝐤𝐢𝐧𝐠
+            </button>
+        </div>
+    </form>
+
+    <!-- AJAX script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInput = document.getElementById('date');
+        const employeeSelect = document.getElementById('employee');
+        const timeSelect = document.getElementById('time');
+
+        function fetchAvailableTimes() {
+            const date = dateInput.value;
+            const employeeId = employeeSelect.value;
+            if (!date || !employeeId) return;
+
+            fetch(`/get-available-times/?employee_id=${employeeId}&date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    timeSelect.innerHTML = '';
+
+                    if (data.available_times.length > 0) {
+                        data.available_times.forEach(time => {
+                            const option = document.createElement('option');
+                            option.value = time;
+                            option.textContent = time;
+                            timeSelect.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.disabled = true;
+                        option.selected = true;
+                        option.textContent = 'Vaqt mavjud emas, boshqa sanani tanlang.';
+                        timeSelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Xatolik:', error);
+                });
+        }
+
+        dateInput.addEventListener('change', fetchAvailableTimes);
+        employeeSelect.addEventListener('change', fetchAvailableTimes);
+    });
+    </script>
+</div>
+{% endblock %}

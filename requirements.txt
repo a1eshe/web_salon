@@ -1,0 +1,5 @@
+Django>=4.0
+textblob
+# boshqa kutubxonalar (masalan):
+gunicorn
+psycopg2-binary

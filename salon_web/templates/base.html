@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>𝓥𝓮𝓵𝓿𝓮𝓽 𝓑𝓮𝓪𝓾𝓽𝔂</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="text-gray-800 min-h-screen flex flex-col bg-white">
+
+    <!-- 🎀 HEADER video to'liq ekran -->
+    <header class="relative h-screen w-full overflow-hidden">
+        <!-- Fullscreen video -->
+        <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+            <source src="{% static 'videos/salon.mp4' %}" type="video/mp4">
+        </video>
+
+        <!-- Overlay (logo + nav) -->
+        <div class="relative z-10 h-full w-full bg-black bg-opacity-30 flex flex-col justify-between">
+            <!-- Top bar -->
+            <div class="flex justify-between items-center px-8 py-6 text-white">
+                <h1 class="text-3xl font-bold">
+                    <a href="/" class="hover:text-pink-400 transition">𝓥𝓮𝓵𝓿𝓮𝓽 𝓑𝓮𝓪𝓾𝓽𝔂</a>
+                </h1>
+                <nav class="space-x-4 text-lg">
+                    {% if user.is_authenticated %}
+                        {% if user.profile.user_type == 'worker' %}
+                            <a href="{% url 'profile' %}" class="hover:text-pink-300 transition">𝐏𝐫𝐨𝐟𝐢𝐥𝐞</a>
+                            <a href="{% url 'my_clients' %}" class="hover:text-pink-300 transition">𝐌𝐲 𝐂𝐥𝐢𝐞𝐧𝐭𝐬</a>
+                            <a href="{% url 'calendar' %}" class="hover:text-pink-300 transition">𝐂𝐚𝐥𝐞𝐧𝐝𝐚𝐫</a>
+                            <a href="{% url 'analysis' %}" class="hover:text-pink-300 transition">𝐀𝐧𝐚𝐥𝐲𝐬𝐢𝐬</a>
+                            <a href="{% url 'customer_segments' %}" class="hover:text-pink-300 transition">Client Cluster</a>
+                            <a href="/logout/" class="hover:text-pink-300 transition">𝐋𝐨𝐠𝐨𝐮𝐭</a>
+                        {% else %}
+                            <a href="{% url 'profile' %}" class="hover:text-pink-300 transition">𝐏𝐫𝐨𝐟𝐢𝐥𝐞</a>
+                            <a href="/my-bookings/" class="hover:text-pink-300 transition">𝐌𝐲 𝐛𝐨𝐨𝐤𝐢𝐧𝐠𝐬🌈™</a>
+                            <a href="/review/" class="hover:text-pink-300 transition">𝐑𝐞𝐯𝐢𝐞𝐰</a>
+                            <a href="/logout/" class="hover:text-pink-300 transition">𝐋𝐨𝐠𝐨𝐮𝐭</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="/login/" class="hover:text-pink-300 transition">𝐋𝐨𝐠𝐢𝐧</a>
+                        <a href="/register/" class="hover:text-pink-300 transition">𝐑𝐞𝐠𝐢𝐬𝐭𝐞𝐫</a>
+                    {% endif %}
+                </nav>
+            </div>
+
+            <!-- Tagline -->
+            <div class="text-center text-white mb-12">
+                <h2 class="text-4xl font-light">Your Beauty, Our Passion ✨</h2>
+            </div>
+        </div>
+    </header>
+
+    <!-- 📄 Main Content -->
+    <main class="relative flex-grow">
+        <!-- Background video -->
+        <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+            <source src="{% static 'videos/salon.mp4' %}" type="video/mp4">
+        </video>
+
+        <!-- Pink transparent overlay -->
+        <div class="absolute top-0 left-0 w-full h-full bg-pink-100 bg-opacity-60 z-10"></div>
+
+        <!-- Main content block -->
+        <div class="relative z-20 max-w-5xl mx-auto px-6 py-12">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- 👣 Footer -->
+    <footer class="bg-gray-100 text-center text-sm text-gray-500 py-4 z-20 relative">
+        © {% now "Y" %} Velvet Beauty. All rights reserved.
+    </footer>
+
+    <!-- Help Button -->
+    <button id="chatbot-toggle" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: #00796b; color: white; border: none; padding: 12px 18px; border-radius: 25px;">Help 💬</button>
+
+    <!-- Chatbot Window -->
+    <div id="chatbot" style="display: none; position: fixed; bottom: 80px; left: 20px; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 1000; overflow: hidden;">
+        <div style="background: #00796b; color: white; padding: 10px; font-weight: bold; display: flex; justify-content: space-between;">
+            <span>Salon Assistant</span>
+            <button onclick="document.getElementById('chatbot').style.display='none'" style="background: none; color: white; border: none;">✖</button>
+        </div>
+        <div id="chat-content" style="padding: 10px; height: 300px; overflow-y: auto; font-size: 14px;"></div>
+        <div style="display: flex; border-top: 1px solid #ccc;">
+            <input id="user-input" type="text" placeholder="Savolingizni yozing..." style="flex: 1; padding: 10px; border: none;">
+            <button onclick="sendMessage()" style="background: #00796b; color: white; border: none; padding: 10px;">📤</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("chatbot-toggle").addEventListener("click", function () {
+            const bot = document.getElementById("chatbot");
+            bot.style.display = bot.style.display === "none" ? "block" : "none";
+        });
+
+        document.getElementById("user-input").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") sendMessage();
+        });
+
+        function sendMessage() {
+            const input = document.getElementById("user-input");
+            const message = input.value.trim();
+            if (!message) return;
+
+            const content = document.getElementById("chat-content");
+            content.innerHTML += `<div><strong>Siz:</strong> ${message}</div>`;
+            input.value = "";
+
+            fetch("/chat/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    content.innerHTML += `<div><strong>Salon AI:</strong> ${data.reply}</div>`;
+                    content.scrollTop = content.scrollHeight;
+                });
+        }
+    </script>
+</body>
+</html>

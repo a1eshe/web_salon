@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-xl mt-12 mb-12">
+    <!-- Title and User Information -->
+    <div class="text-center mb-8">
+        <h2 class="text-4xl font-extrabold text-gray-800 mb-2">Profilingiz</h2>
+        <p class="text-lg text-gray-500">Salonimizdagi barcha ma'lumotlaringiz</p>
+    </div>
+
+    <!-- Profile Details -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div class="bg-gradient-to-r from-pink-50 via-purple-50 to-indigo-50 p-6 rounded-xl shadow-lg">
+            <p><strong class="text-gray-700 text-lg">Foydalanuvchi nomi:</strong> <span class="text-gray-500">{{ request.user.username }}</span></p>
+            <p><strong class="text-gray-700 text-lg">Telefon raqami:</strong> <span class="text-gray-500">{{ customer.phone }}</span></p>
+            <p><strong class="text-gray-700 text-lg">Manzil:</strong> <span class="text-gray-500">{{ customer.address }}</span></p>
+            <p><strong class="text-gray-700 text-lg">Referral kodi:</strong> <span class="text-gray-500">{{ customer.referral_code|default:"Yo'q" }}</span></p>
+            <p><strong class="text-gray-700 text-lg">Yangi mijoz chegirmasi:</strong> <span class="text-gray-500">{{ customer.discount }}%</span></p>
+        </div>
+    </div>
+
+    <!-- Referral Link Section -->
+    {% if customer.referral_code %}
+    <div class="mt-8 bg-gray-50 p-8 rounded-xl shadow-lg">
+        <label class="font-semibold text-gray-700 text-lg">Referral havolangiz:</label>
+        <div class="flex mt-4 items-center">
+            <input type="text" id="referralLink" readonly class="border border-gray-300 rounded-l px-6 py-4 w-full text-gray-600 font-medium" value="https://yourdomain.com/register/?ref={{ customer.referral_code }}">
+            <button onclick="copyReferral()" class="bg-indigo-600 text-white px-6 py-3 rounded-r hover:bg-indigo-700 focus:outline-none transition">Nusxala</button>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Referred Users Section -->
+    {% if referrals %}
+    <div class="mt-8 bg-green-50 p-8 rounded-xl shadow-lg">
+        <h3 class="text-xl font-bold text-green-700 mb-4">Siz orqali ro'yxatdan o'tgan mijozlar</h3>
+        <ul class="list-disc pl-6 text-gray-700">
+            {% for ref in referrals %}
+                <li><strong>{{ ref.user.username }}</strong> - chegirma: {{ ref.discount }}%</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Edit Profile Button -->
+    <div class="mt-8 text-center">
+        <a href="{% url 'edit_profile' %}" class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl focus:outline-none transition">Profilni tahrirlash</a>
+    </div>
+</div>
+
+<script>
+function copyReferral() {
+    const copyText = document.getElementById("referralLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile
+    document.execCommand("copy");
+    alert("Referral havola nusxalandi!");
+}
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
+    <h2 class="text-2xl font-bold text-center text-pink-600 mb-4">Profilni tahrirlash</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="profile_picture" class="block text-pink-500 font-medium mb-2">Profil rasmini o'zgartirish</label>
+            <input type="file" name="profile_picture" id="profile_picture" class="w-full py-2 px-4 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500 transition" accept="image/*">
+        </div>
+        
+        <!-- Form fields for other profile details -->
+        {{ form.as_p }}
+
+        <div class="mt-6 text-center">
+            <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full focus:outline-none transition duration-300">
+                Saqlash
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

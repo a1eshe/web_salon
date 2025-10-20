@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mening Mijozlarim{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">👥 Mening Mijozlarim</h2>
+
+    {% if clients %}
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Foydalanuvchi</th>
+                    <th>Telefon</th>
+                    <th>Manzil</th>
+                    <th>Email</th>
+                    <th>Referral Kodi</th>
+                    <th>Kimdan Keldi</th>
+                    <th>Chegirma (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ client.user.username }}</td>
+                    <td>{{ client.phone|default:"-" }}</td>
+                    <td>{{ client.address|default:"-" }}</td>
+                    <td>{{ client.user.email|default:"-" }}</td>
+                    <td>{{ client.referral_code|default:"-" }}</td>
+                    <td>
+                        {% if client.referred_by %}
+                            {{ client.referred_by.user.username }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ client.discount|default:0 }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">Sizda hozircha hech qanday mijoz mavjud emas.</div>
+    {% endif %}
+</div>
+{% endblock %}

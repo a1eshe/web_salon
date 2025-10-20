@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mijoz segmentlari</title>
+    <style>
+        /* Sizning CSS qismingiz aynan shu yerda */
+        /* Fonts & base */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f9fafc;
+            color: #333;
+        }
+        h1 {
+            font-weight: 600;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #2c3e50;
+        }
+        h2 {
+            margin-top: 40px;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #34495e;
+            text-align: center;
+        }
+        .table-container {
+            overflow-x: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            background: #fff;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        thead {
+            background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+            color: #fff;
+        }
+        th, td {
+            padding: 14px 18px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            transition: background-color 0.3s ease;
+        }
+        tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .message {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-top: 30px;
+            font-style: italic;
+        }
+        .chart {
+            max-width: 700px;
+            margin: 40px auto 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        @media (max-width: 700px) {
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.85rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .chart {
+                padding: 15px;
+                margin: 30px 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Mijoz Segmentlari</h1>
+
+    {% if message %}
+        <p class="message">{{ message }}</p>
+    {% else %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>O'rtacha Price Type</th>
+                        <th>O'rtacha Price</th>
+                        <th>O'rtacha Discount</th>
+                        <th>Segment (Cluster)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for segment in segments %}
+                    <tr>
+                        <td>{{ segment.customer_id }}</td>
+                        <td>{{ segment.price_type_num|floatformat:2 }}</td>
+                        <td>{{ segment.price|floatformat:2 }}</td>
+                        <td>{{ segment.discount_applied_num|floatformat:2 }}</td>
+                        <td>{{ segment.cluster }}</td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="chart">
+            <h2>Vizual klasterlar</h2>
+            <img src="{{ graph }}" alt="Cluster diagrammasi" />
+        </div>
+    {% endif %}
+</body>
+</html>

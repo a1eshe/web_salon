@@ -1,0 +1,322 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xizmatlar reytingi</title>
+    {% load static %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        color: #333;
+        background-image: url("https://media.istockphoto.com/id/1328536035/photo/towel-hot-stone-massage-and-cosmetics-in-modern-beauty-studio.jpg?s=2048x2048&w=is&k=20&c=IIof76suNp4oJLwiinY5WN3wFUJzlHnUqj9G-LBrBuY=");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        }
+        
+
+
+
+        h2 {
+            color: #333;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* biroz shaffof */
+            padding: 40px;
+            border-radius: 15px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 750px;
+            box-sizing: border-box;
+        }
+
+        .service-list {
+            padding-left: 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            font-size: 18px;
+            align-items: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .service-item:hover {
+            background-color: #ececec;
+            transform: scale(1.03);
+        }
+
+        .positive {
+            background-color: #d4f7d4;
+            color: #4caf50;
+            border-left: 5px solid #4caf50;
+        }
+
+        .negative {
+            background-color: #ffebee;
+            color: #f44336;
+            border-left: 5px solid #f44336;
+        }
+
+        .count {
+            font-weight: bold;
+            color: #555;
+            margin-left: 10px;
+        }
+
+        .positive:hover {
+            background-color: #c4e7c4;
+        }
+
+        .negative:hover {
+            background-color: #f8d7da;
+        }
+
+        .service-item span {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>👍 Eng ko‘p yoqqan xizmatlar</h2>
+    <ul class="service-list">
+        {% for s in top_positive %}
+            <li class="service-item positive">
+                <span>{{ s.service__name }}</span>
+                <span class="count">{{ s.count }} ta ijobiy sharh</span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>👎 Eng ko‘p shikoyat qilingan xizmatlar</h2>
+    <ul class="service-list">
+        {% for s in top_negative %}
+            <li class="service-item negative">
+                <span>{{ s.service__name }}</span>
+                <span class="count">{{ s.count }} ta salbiy sharh</span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xizmatlar reytingi</title>
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+            background-image: url("https://media.istockphoto.com/id/1328536035/photo/towel-hot-stone-massage-and-cosmetics-in-modern-beauty-studio.jpg?s=2048x2048&w=is&k=20&c=IIof76suNp4oJLwiinY5WN3wFUJzlHnUqj9G-LBrBuY=");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            box-sizing: border-box;
+            margin: 30px 0;
+        }
+
+        .service-list {
+            padding-left: 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            font-size: 18px;
+            align-items: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .service-item:hover {
+            background-color: #ececec;
+            transform: scale(1.03);
+        }
+
+        .positive {
+            background-color: #d4f7d4;
+            color: #4caf50;
+            border-left: 5px solid #4caf50;
+        }
+
+        .negative {
+            background-color: #ffebee;
+            color: #f44336;
+            border-left: 5px solid #f44336;
+        }
+
+        .count {
+            font-weight: bold;
+            color: #555;
+            margin-left: 10px;
+        }
+
+        .chart-container {
+            margin-top: 40px;
+        }
+
+        canvas {
+            margin-top: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>👍 Eng ko‘p yoqqan xizmatlar</h2>
+    <ul class="service-list">
+        {% for s in top_positive %}
+            <li class="service-item positive">
+                <span>{{ s.service__name }}</span>
+                <span class="count">{{ s.count }} ta ijobiy sharh</span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>👎 Eng ko‘p shikoyat qilingan xizmatlar</h2>
+    <ul class="service-list">
+        {% for s in top_negative %}
+            <li class="service-item negative">
+                <span>{{ s.service__name }}</span>
+                <span class="count">{{ s.count }} ta salbiy sharh</span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="chart-container">
+        <h2>📊 Grafik ko‘rinish</h2>
+
+        <canvas id="positiveChart" width="600" height="300"></canvas>
+        <canvas id="negativeChart" width="600" height="300"></canvas>
+    </div>
+</div>
+<script id="top-positive-data" type="application/json">
+    {{ top_positive_json|safe }}
+</script>
+<script id="top-negative-data" type="application/json">
+    {{ top_negative_json|safe }}
+</script>
+
+<script>
+    const topPositive = JSON.parse(document.getElementById('top-positive-data').textContent);
+    const topNegative = JSON.parse(document.getElementById('top-negative-data').textContent);
+
+
+    const positiveLabels = topPositive.map(item => item.service__name);
+    const positiveCounts = topPositive.map(item => item.count);
+
+    const negativeLabels = topNegative.map(item => item.service__name);
+    const negativeCounts = topNegative.map(item => item.count);
+
+    new Chart(document.getElementById('positiveChart'), {
+        type: 'bar',
+        data: {
+            labels: positiveLabels,
+            datasets: [{
+                label: 'Ijobiy sharhlar soni',
+                data: positiveCounts,
+                backgroundColor: '#4caf50'
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Eng yaxshi xizmatlar (ijobiy sharhlar)'
+                },
+                legend: { display: false }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('negativeChart'), {
+        type: 'bar',
+        data: {
+            labels: negativeLabels,
+            datasets: [{
+                label: 'Salbiy sharhlar soni',
+                data: negativeCounts,
+                backgroundColor: '#f44336'
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Eng yomon xizmatlar (salbiy sharhlar)'
+                },
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
